@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello react</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+// class DateTimePicker extends React.Component
+class Hello extends React.Component{
+        
+    render(){
+        let propty=this.props.message;
+        return(
+            <div>
+            <h1>{propty} Hello React </h1>
+                </div>
+        );
+    };
+};
+const Result=(props)=>{
+return(
+    <div>...</div>
+);
+};
+class Arrayreader extends React.Component{
+    constructor(props){
+        super(props);
+        this.Days=this.props.favDays;
+    }
+    render(){
+        return(
+            <div>
+                {
+                    this.Days.map((days,index)=>{
+                        return <li key={days.toString()}>{days}</li>
+                    })
+                }
+            </div>
+        );
+    };
+};
+class Button extends React.Component{
+    constructor(props){
+        super(props);
+        this.state={counter : 0};
+    }
+    Clickhandler =()=>{
+        // this === component instance
+        // when we are working on component state and creiteria where you want to change the state of component
+        //then you are using setState method
+//         this.setState({
+//             counter : this.state.counter + 1
+// )
+//     }
+//alternative way from prevent the race conditions
+    this.setState((prevState)=>{
+        return{
+        counter:prevState.counter + 1
+
+        };
+    });
+    };
+    render(){
+        return(
+            <div>
+            <h1>{this.state.counter}</h1>
+            <button onClick={this.Clickhandler}>counter</button>
+            </div>
+        )
+    }
+}
+
+ReactDOM.render(
+    <div>
+    <Hello message="successfully!" />
+    <Button />
+    <Arrayreader favDays={['Thus','Fri','Sat','Sun']} />
+    <Result />    
+    </div>
+    ,
+    document.getElementById('root')
+);
+       
+    </script>
+</body>
+
+</html>

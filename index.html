@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
+<style>
+    .divhov input:hover{
+        box-shadow: 5px 5px 5px gray;
+    }
+
+</style>
+
+</head>
+
+<body>
+    <div id="root"></div>
+    <!--this is done as documentGetelementbyid although we have an altenative and more effienct way to do with component state-->
+    <!--//   ref={(input)=> this.userNameInput = input}-->
+
+    <script type="text/babel">
+        const Card=(props)=>{
+            return(
+                <div  style={{margin:'1em'}}><img width="90" src={props.avatar_url}/>
+                <div style={{display:'inline-block',margin:10}} >
+                <div style={{fontFamily:'Arial',fontSize:'1.25em' , fontWeight:'bold'}}>{props.name}</div>
+                <div style={{fontFamily:'Arial'}} >{props.company}</div>
+               </div> 
+                </div>
+            );
+        };
+        class Form extends React.Component{
+            state={userName:''}
+            handleSubmit=(event)=>{
+                event.preventDefault();
+             console.log("Event: Form submit",this.state.userName);
+              //axios and fetch
+              //axios is one of the best way to handle ajajx request
+axios.get('https://api.github.com/users/'+this.state.userName)
+     .then(resp =>{
+        this.state.userName='';
+        this.props.onSubmit(resp.data);
+     });          
+    };
+            render(){
+                return(
+                    <div>
+
+                        <form onSubmit={this.handleSubmit}>
+                           <div className="divhov" >
+                           <input placeholder="Enter Username" 
+                           value={this.state.userName}
+                           onChange={(event)=>this.setState({ userName: event.target.value })}
+                           style={{height:25 , width:250, borderRadius:5}} 
+                           type="text" required/>
+                           </div>
+                           <div> <input style={{margin:10,width:100 , fontSize:15, height:25,borderRadius:3}} type="submit"  value="Add Card"
+                            /></div>
+                        </form>
+                    </div>
+                )
+            }
+        }
+       
+        const CardList=(props)=>{
+            return(
+                <div>
+                 {props.cards.map((card,index) => <Card key={index} {...card} /> )}       
+                </div>
+            )
+        }
+        class App extends React.Component{
+            state={ 
+            cards:[
+            {name: "Alper Delrio",
+            avatar_url:"https://avatars1.githubusercontent.com/u/1692?v=4",
+             company:"Facebook"   
+            },
+            {
+                name:"Paul O’Shannessy",
+                avatar_url:"https://avatars1.githubusercontent.com/u/8445?v=4",
+                company:"Facebook",
+            },
+            {
+                name:"Zach",
+                avatar_url:"https://avatars1.githubusercontent.com/u/3903?v=4",
+                company:"Facebook",
+            },
+        ]};
+        addNewCard=(cardInfo) =>{
+            this.setState(prevState =>({
+                cards: prevState.cards.concat(cardInfo)
+            }));
+        };
+render(){ 
+    return(
+        <div>
+            <Form onSubmit={this.addNewCard} />
+            <CardList  cards={this.state.cards} />
+        </div>
+    )
+}
+
+
+        }
+        ReactDOM.render(
+        <div>
+            <App  />
+        </div>,
+         document.getElementById('root') );
+
+    </script>
+   
+</body>
+
+</html>
